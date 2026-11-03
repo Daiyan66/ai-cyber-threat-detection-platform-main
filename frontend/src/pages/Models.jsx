@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Cpu, ShieldCheck, Award, Zap, Activity, RefreshCw } from 'lucide-react';
 import Loader from '../components/Loader';
+import { getApiUrl } from '../utils/api';
 
 const Models = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-
   const fetchMetrics = async () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await axios.get(`${API_URL}/model/metrics`);
+      const res = await axios.get(`${getApiUrl()}/model/metrics`);
       setData(res.data);
     } catch (err) {
       console.error("Failed to load model metrics:", err);
@@ -95,6 +94,12 @@ const Models = () => {
           <span>Refresh Metrics</span>
         </button>
       </div>
+
+      {error && (
+        <div className="bg-amber-950/20 border border-amber-500/20 px-4 py-2.5 rounded-lg text-xs text-amber-300 flex items-center justify-between">
+          <span>{error} Showing cached benchmark metrics.</span>
+        </div>
+      )}
 
       {/* Model Overview Panel */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

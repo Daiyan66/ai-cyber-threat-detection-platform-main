@@ -128,6 +128,8 @@ def parse_and_classify_live_telemetry(raw_packets):
             tot_pkts = fl["pkts"]
             tot_bytes = fl["bytes"]
             flow_vector = {
+                'port': fl['port'],
+                'protocol': fl['protocol'],
                 'flow_duration': max(50, tot_pkts * 12),
                 'tot_fwd_pkts': tot_pkts,
                 'tot_bwd_pkts': 1,

@@ -5,18 +5,55 @@ import { Calendar, TrendingUp, AlertTriangle } from 'lucide-react';
 
 import Loader from '../components/Loader';
 import EmptyState from '../components/EmptyState';
+import { getApiUrl } from '../utils/api';
+
+const AnalyticsTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-slate-900/90 border border-slate-800 p-4 rounded-xl shadow-2xl backdrop-blur-md">
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <Calendar className="w-3.5 h-3.5 text-sky-400" />
+          <span>{label}</span>
+        </p>
+        <div className="space-y-1.5 text-sm font-semibold">
+          <p className="text-cyber-red flex items-center justify-between gap-6">
+            <span>Critical:</span>
+            <span>{payload[0].value.toLocaleString()}</span>
+          </p>
+          <p className="text-cyber-orange flex items-center justify-between gap-6">
+            <span>High:</span>
+            <span>{payload[1].value.toLocaleString()}</span>
+          </p>
+          <p className="text-cyber-yellow flex items-center justify-between gap-6">
+            <span>Medium:</span>
+            <span>{payload[2].value.toLocaleString()}</span>
+          </p>
+          <p className="text-cyber-green flex items-center justify-between gap-6">
+            <span>Low / Benign:</span>
+            <span>{payload[3].value.toLocaleString()}</span>
+          </p>
+          <div className="border-t border-slate-800/80 pt-1.5 mt-1.5 text-slate-200 flex items-center justify-between">
+            <span>Total Volume:</span>
+            <span className="font-bold">
+              {(payload[0].value + payload[1].value + payload[2].value + payload[3].value).toLocaleString()}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
 
 const Analytics = () => {
   const [loading, setLoading] = useState(true);
   const [trendData, setTrendData] = useState([]);
   const [days, setDays] = useState(30); // Default to 30 days window
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-
   const fetchTrendData = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_URL}/threats/trend`, {
+      const res = await axios.get(`${getApiUrl()}/threats/trend`, {
         params: { days }
       });
       
@@ -46,44 +83,6 @@ const Analytics = () => {
   useEffect(() => {
     fetchTrendData();
   }, [days]);
-
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-slate-900/90 border border-slate-800 p-4 rounded-xl shadow-2xl backdrop-blur-md">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-sky-400" />
-            <span>{label}</span>
-          </p>
-          <div className="space-y-1.5 text-sm font-semibold">
-            <p className="text-cyber-red flex items-center justify-between gap-6">
-              <span>Critical:</span>
-              <span>{payload[0].value.toLocaleString()}</span>
-            </p>
-            <p className="text-cyber-orange flex items-center justify-between gap-6">
-              <span>High:</span>
-              <span>{payload[1].value.toLocaleString()}</span>
-            </p>
-            <p className="text-cyber-yellow flex items-center justify-between gap-6">
-              <span>Medium:</span>
-              <span>{payload[2].value.toLocaleString()}</span>
-            </p>
-            <p className="text-cyber-green flex items-center justify-between gap-6">
-              <span>Low / Benign:</span>
-              <span>{payload[3].value.toLocaleString()}</span>
-            </p>
-            <div className="border-t border-slate-800/80 pt-1.5 mt-1.5 text-slate-200 flex items-center justify-between">
-              <span>Total Volume:</span>
-              <span className="font-bold">
-                {(payload[0].value + payload[1].value + payload[2].value + payload[3].value).toLocaleString()}
-              </span>
-            </div>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <div className="space-y-6">
@@ -166,7 +165,7 @@ const Analytics = () => {
                   tickLine={false}
                   axisLine={false}
                 />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<AnalyticsTooltip />} />
                 <Legend 
                   verticalAlign="top" 
                   height={36} 
@@ -231,7 +230,7 @@ const Analytics = () => {
         <div>
           <h4 className="text-sm font-semibold text-slate-200">Simulated Playback Sync</h4>
           <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-            Note: The data timeline is replayed from public labeled captures. For the current demo dataset, the trend aggregated hourly spans the 20 hours of KDD traffic logs loaded during seeding.
+            Note: The data timeline is replayed from public labeled captures. For the current demo dataset, the trend aggregated hourly spans the CIC-IDS2017 flow telemetry logs loaded during database initialization.
           </p>
         </div>
       </div>

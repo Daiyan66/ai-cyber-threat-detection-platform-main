@@ -100,7 +100,7 @@ def get_threats(
     if status:
         filters.append(func.lower(Threat.status) == status.lower())
     if exclude_normal:
-        filters.append(func.lower(Threat.attack_type) != "normal")
+        filters.append(~func.lower(Threat.attack_type).in_(["normal", "benign"]))
     if search:
         search_term = f"%{search.strip()}%"
         filters.append(
@@ -256,7 +256,7 @@ def get_threats_map(db: Session = Depends(get_db)):
         and_(
             Threat.geo_lat.isnot(None),
             Threat.geo_lon.isnot(None),
-            func.lower(Threat.attack_type) != "benign"
+            ~func.lower(Threat.attack_type).in_(["normal", "benign"])
         )
     ).group_by(
         Threat.geo_country,
@@ -308,6 +308,9 @@ def update_threat(id: int, update_data: ThreatUpdate, db: Session = Depends(get_
         if status_val not in ["open", "investigating", "resolved"]:
             raise HTTPException(status_code=400, detail="Invalid status. Must be 'open', 'investigating', or 'resolved'.")
         threat.status = status_val
+
+    if "is_blocked" in data:
+        threat.is_blocked = bool(data["is_blocked"])
         
     if "ai_explanation" in data:
         threat.ai_explanation = data["ai_explanation"]

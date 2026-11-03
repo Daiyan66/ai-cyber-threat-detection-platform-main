@@ -1,0 +1,706 @@
+====================================================================================================
+           AI CYBER THREAT DETECTION PLATFORM (ENTERPRISE SOC CONSOLE & IDS/IPS ENGINE)
+                     COMPREHENSIVE ARCHITECTURAL, TECHNICAL & FUNCTIONAL SPECIFICATION
+====================================================================================================
+Document Type       : Complete Project Technical Dossier & Architecture Manual
+Academic Context    : Final Year Major Project (7th/8th Semester B.Tech/B.E. Computer Science & Engg)
+Domain              : Cybersecurity, Network Intrusion Detection (NIDS), Explainable AI, SOAR
+Author/Repository   : ai-cyber-threat-detection-platform-main
+Generated Date      : October 2026
+====================================================================================================
+
+TABLE OF CONTENTS:
+----------------------------------------------------------------------------------------------------
+ 1. EXECUTIVE SUMMARY & PROJECT PURPOSE
+ 2. CORE PROGRAMMING LANGUAGES & TECHNICAL PARADIGMS
+ 3. COMPLETE TECHNOLOGY STACK, LIBRARIES & FRAMEWORKS
+ 4. DATABASE ARCHITECTURE, SCHEMAS & DATA PERSISTENCE
+ 5. DATASET & NETWORK FLOW TELEMETRY BENCHMARK (CIC-IDS2017)
+ 6. MACHINE LEARNING ARCHITECTURE & MULTI-MODEL BENCHMARK
+ 7. EXPLAINABLE AI (XAI) & SHAP FEATURE ATTRIBUTION
+ 8. GENERATIVE AI ASSISTANT (GOOGLE GEMINI 1.5 FLASH)
+ 9. NETWORK PACKET INGESTION & ZERO-DEPENDENCY PCAP ENGINE
+10. LIVE HARDWARE NETWORK SNIFFER & TRAFFIC SIMULATION
+11. BACKEND REST API & WEBSOCKET ARCHITECTURE (FASTAPI)
+12. FRONTEND SOC DASHBOARD ARCHITECTURE (REACT 19 + VITE)
+13. ACTIVE FIREWALL CONTAINMENT & SOAR INTEGRATION
+14. FORENSIC INCIDENT AUDIT REPORTING ENGINE (REPORTLAB PDF)
+15. COMPLETE REPOSITORY DIRECTORY & FILE BREAKDOWN
+16. INSTALLATION, CONFIGURATION & STEP-BY-STEP EXECUTION GUIDE
+17. EVALUATOR & VIVA EXAMINATION QUESTIONS WITH ANSWERS
+====================================================================================================
+
+
+====================================================================================================
+1. EXECUTIVE SUMMARY & PROJECT PURPOSE
+====================================================================================================
+The AI Cyber Threat Detection Platform is a full-stack, enterprise-grade Security Operations Center 
+(SOC) console and Automated Intrusion Detection and Prevention System (IDS/IPS). Modern enterprise 
+networks generate millions of packet conversations every minute; legacy signature-based intrusion 
+detection systems (like basic Snort rules) fail to identify zero-day attacks, stealthy reconnaissance, 
+and low-and-slow volumetric anomalies. 
+
+This platform bridges the gap between raw binary network packet inspection and actionable security 
+orchestration by combining:
+1. Low-level binary packet parsing and bidirectional flow reconstruction (CICFlowMeter standard).
+2. Supervised machine learning multi-model classification trained on modern telemetry (CIC-IDS2017).
+3. Explainable AI (XAI via SHAP) to mathematically justify why the AI flagged an anomaly.
+4. Generative AI (Google Gemini 1.5 Flash) acting as an automated Tier-1 SOC analyst to translate 
+   complex flow metrics into plain-English incident summaries and remediation playbooks.
+5. Bi-directional WebSocket telemetry streaming for zero-latency alert push across analyst consoles.
+6. Security Orchestration, Automation, and Response (SOAR) capabilities that enforce active host OS 
+   firewall drop rules (Windows netsh) and generate multi-platform defense syntax (Linux iptables, 
+   Suricata, Snort).
+7. One-click publication-grade PDF Forensic Incident Report generation for compliance and audits.
+
+
+====================================================================================================
+2. CORE PROGRAMMING LANGUAGES & TECHNICAL PARADIGMS
+====================================================================================================
+The platform is built using a modern polyglot architecture optimized for low-latency network packet 
+processing on the backend and reactive visualization on the frontend:
+
+1. PYTHON (Version 3.10+ / 3.11 / 3.13):
+   - Primary Backend & Machine Learning Language.
+   - Selected for its rich data science ecosystem (Scikit-Learn, Pandas, NumPy, SHAP) and high-speed 
+     asynchronous web handling (FastAPI, Uvicorn, Asyncio).
+   - Low-level network programming: Uses Python standard library 'struct' and 'socket' modules for 
+     bit-level binary packet parsing without heavy third-party dependencies (like Scapy or libpcap).
+
+2. JAVASCRIPT / JSX (ECMAScript 2023+ / React 19):
+   - Frontend Application Language.
+   - Built on modern React 19 functional components with React Hooks (useState, useEffect, useLocation, 
+     useMemo) and asynchronous HTTP/WebSocket state synchronization.
+   - Powers dynamic charting (Recharts), vector geospatial mapping (SVG Math), and real-time alerts.
+
+3. STRUCTURED QUERY LANGUAGE (SQL):
+   - Data definition, index management, and relational querying.
+   - Implemented via SQLAlchemy 2.0 ORM with dialect portability supporting both SQLite and PostgreSQL.
+   - Uses SQL-level aggregation, timestamp formatting (strftime / to_char), and dynamic CASE pivoting 
+     for sub-millisecond timeline metrics.
+
+4. HTML5 & CSS3 (Tailwind CSS 3.4):
+   - Structure and responsive styling.
+   - Customized dark-mode cybersecurity palette (Slate-950, Emerald, Rose, Amber, Sky Blue).
+   - Glassmorphic panels, CSS keyframe radar sweeps, animated ping markers, and micro-interactions.
+
+5. SHELL SCRIPTING & OS COMMANDS:
+   - Windows Command / PowerShell ('netsh advfirewall firewall add rule ...') for host firewall blocks.
+   - Linux Shell / IPTables syntax for perimeter firewall rule synthesis.
+
+
+====================================================================================================
+3. COMPLETE TECHNOLOGY STACK, LIBRARIES & FRAMEWORKS
+====================================================================================================
+----------------------------------------------------------------------------------------------------
+BACKEND & INGESTION STACK:
+----------------------------------------------------------------------------------------------------
+- FastAPI (>=0.100.0)      : High-performance ASGI asynchronous web framework. Auto-generates OpenAPI 
+                             (Swagger) interactive API documentation at /docs.
+- Uvicorn (>=0.22.0)      : Lightning-fast ASGI web server implementation based on uvloop and httptools.
+- SQLAlchemy (>=2.0.0)    : Modern Object Relational Mapper (ORM) and SQL toolkit.
+- Psycopg2-binary (>=2.9) : PostgreSQL database adapter for production deployments (Supabase/Neon).
+- Pydantic (>=2.0.0)      : High-speed data parsing and validation engine powered by Rust core.
+- ReportLab (>=4.0.0)     : Industry-standard engine for dynamic PDF document creation and layout.
+- Python-dotenv (>=1.0.0) : Environment variable loader (.env management).
+- Joblib (>=1.3.0)        : High-efficiency serialization for trained machine learning pipelines.
+- Standard Library Modules:
+  * struct                : Binary data packing/unpacking for Ethernet, IPv4, and TCP headers.
+  * socket                : Network socket interface, raw socket capture, IP address translation.
+  * urllib.request        : Built-in HTTP client for Google Gemini API communication.
+  * subprocess            : Execution of operating system firewall commands.
+  * platform              : Host OS identification (Windows vs. Linux vs. Darwin).
+
+----------------------------------------------------------------------------------------------------
+MACHINE LEARNING & EXPLAINABILITY STACK:
+----------------------------------------------------------------------------------------------------
+- Scikit-Learn (>=1.2.0)  : Machine learning algorithms (RandomForestClassifier, HistGradientBoosting, 
+                             MLPClassifier, LogisticRegression), preprocessing (StandardScaler), and 
+                             evaluation metrics (precision, recall, F1, confusion matrix).
+- SHAP (>=0.44.0)         : SHapley Additive exPlanations. Utilizes TreeExplainer for local feature 
+                             attribution and game-theoretic interpretability.
+- Pandas (>=2.0.0)        : Tabular data structures, dataframe manipulation, and CSV serialization.
+- NumPy (>=1.20.0)        : Vectorized numerical computations and random distribution sampling.
+
+----------------------------------------------------------------------------------------------------
+FRONTEND SOC DASHBOARD STACK:
+----------------------------------------------------------------------------------------------------
+- React (19.2.8)          : UI library for component-based reactive user interfaces.
+- Vite (8.2.2)            : Next-generation ultra-fast frontend build tool and development server.
+- React Router DOM (7.18) : Declarative multi-page client-side routing.
+- Recharts (3.10.1)       : Composable charting library built on React components and SVG.
+- Lucide React (1.37.0)   : Modern, clean cybersecurity and operational iconography.
+- Axios (1.20.0)          : Promise-based HTTP client for REST API communication.
+- Tailwind CSS (3.4.19)   : Utility-first CSS framework with PostCSS and Autoprefixer.
+- Oxlint (1.79.0)         : High-performance JavaScript/JSX linter.
+
+
+====================================================================================================
+4. DATABASE ARCHITECTURE, SCHEMAS & DATA PERSISTENCE
+====================================================================================================
+The platform implements a unified persistence layer with dual database support:
+- Local Development Default : SQLite ('threats.db' located in project root).
+- Cloud Production Support  : PostgreSQL (Neon / Supabase / AWS RDS) via DATABASE_URL environment var.
+
+----------------------------------------------------------------------------------------------------
+ORM MODEL DEFINITION: 'threats' TABLE (backend/app/models.py)
+----------------------------------------------------------------------------------------------------
+Column Name       Type           Constraints                     Description
+----------------------------------------------------------------------------------------------------
+id                INTEGER        Primary Key, Indexed, Autoincrement  Unique threat incident ID
+timestamp         DATETIME(TZ)   Nullable=False, Indexed         UTC detection timestamp
+source_ip         VARCHAR(50)    Nullable=False                  Originating IPv4/IPv6 address
+destination_ip    VARCHAR(50)    Nullable=False                  Target internal server / host IP
+attack_type       VARCHAR(50)    Nullable=False, Indexed         Threat category (DDoS, Botnet, etc.)
+severity          VARCHAR(20)    Nullable=False, Indexed         Risk rating: critical, high, med, low
+confidence        FLOAT          Nullable=False                  ML model probability score (0.0 - 1.0)
+status            VARCHAR(20)    Nullable=False, Indexed, Def='open' Incident status (open/investigating/resolved)
+is_blocked        BOOLEAN        Nullable=False, Def=False       Firewall containment active flag
+geo_country       VARCHAR(50)    Nullable=True                   Attacker country (e.g. Germany)
+geo_city          VARCHAR(50)    Nullable=True                   Attacker city (e.g. Frankfurt)
+geo_lat           FLOAT          Nullable=True                   Geographic latitude coordinate
+geo_lon           FLOAT          Nullable=True                   Geographic longitude coordinate
+mitre_id          VARCHAR(20)    Nullable=True                   MITRE ATT&CK technique code (e.g. T1498)
+ai_explanation    TEXT           Nullable=True                   Cached LLM plain-English incident analysis
+features          JSON           Nullable=True                   Complete 22-dimensional flow vector
+
+----------------------------------------------------------------------------------------------------
+DATABASE INDEXING & QUERY OPTIMIZATIONS:
+----------------------------------------------------------------------------------------------------
+1. Multi-Column Indexing: Indexes on 'timestamp', 'attack_type', 'severity', and 'status' allow 
+   sub-millisecond filtering across thousands of records without full table scans.
+2. Server-Side Pagination: Handled through SQLAlchemy .offset((page-1)*limit).limit(limit) to keep 
+   memory footprints minimal even with massive threat logs.
+3. SQL Aggregation & Pivoting: The trend analytics endpoint dynamically formats timestamps 
+   (strftime in SQLite, to_char in PostgreSQL) and pivots severity counts using SQL CASE expressions 
+   in a single query trip instead of looping in Python.
+
+
+====================================================================================================
+5. DATASET & NETWORK FLOW TELEMETRY BENCHMARK (CIC-IDS2017)
+====================================================================================================
+Many university projects rely on the 1999 DARPA/KDD-Cup-99 dataset, which is 25+ years old, lacks 
+modern TCP/IP characteristics, contains duplicated records, and reflects outdated attack vectors. 
+
+This project conforms to the modern CANADIAN INSTITUTE FOR CYBERSECURITY (CIC-IDS2017) flow telemetry 
+standard, generating 12,000 class-balanced, high-entropy flow records (src/data_pipeline.py).
+
+----------------------------------------------------------------------------------------------------
+ATTACK CLASS DISTRIBUTION IN DATASET (12,000 TOTAL RECORDS):
+----------------------------------------------------------------------------------------------------
+Class Name      Target Count  Percentage  MITRE ID  Description
+----------------------------------------------------------------------------------------------------
+Benign          4,200         35.0%       None      Standard legitimate employee/web traffic
+DDoS            3,000         25.0%       T1498     High-rate SYN flooding / volumetric bandwidth exhaustion
+PortScan        1,800         15.0%       T1046     Rapid sequential port scanning & network discovery
+Brute Force     1,440         12.0%       T1110     Repeated credential guessing on SSH (22) / SQL (5432)
+Web Attack        960          8.0%       T1190     Exploit attempts against public HTTP/HTTPS endpoints
+Botnet            600          5.0%       T1071     Periodic command-and-control (C2) beaconing traffic
+
+----------------------------------------------------------------------------------------------------
+THE 22 CORE CICFLOWMETER STATISTICAL FLOW FEATURES:
+----------------------------------------------------------------------------------------------------
+ 1. flow_duration      : Total conversation duration in milliseconds
+ 2. tot_fwd_pkts       : Total packets transferred from client to server (forward)
+ 3. tot_bwd_pkts       : Total packets transferred from server to client (backward)
+ 4. totlen_fwd_pkts    : Total payload bytes sent in forward direction
+ 5. totlen_bwd_pkts    : Total payload bytes sent in backward direction
+ 6. fwd_pkt_len_mean   : Mean length of forward packets (bytes)
+ 7. bwd_pkt_len_mean   : Mean length of backward packets (bytes)
+ 8. flow_byts_s        : Flow transmission velocity in bytes per second
+ 9. flow_pkts_s        : Flow packet rate in packets per second
+10. flow_iat_mean      : Mean inter-arrival time between consecutive packets (ms)
+11. flow_iat_std       : Standard deviation of packet inter-arrival times
+12. fwd_iat_mean       : Mean inter-arrival time of forward packets
+13. bwd_iat_mean       : Mean inter-arrival time of backward packets
+14. syn_flag_cnt       : Presence/count of TCP SYN (Synchronize) control flags
+15. rst_flag_cnt       : Presence/count of TCP RST (Reset connection) control flags
+16. psh_flag_cnt       : Presence/count of TCP PSH (Push buffer) control flags
+17. ack_flag_cnt       : Presence/count of TCP ACK (Acknowledge) control flags
+18. urg_flag_cnt       : Presence/count of TCP URG (Urgent pointer) control flags
+19. fwd_header_len     : Total bytes consumed by forward packet headers
+20. bwd_header_len     : Total bytes consumed by backward packet headers
+21. down_up_ratio      : Download-to-upload asymmetry ratio (tot_bwd_pkts / tot_fwd_pkts)
+22. pkt_len_variance   : Variance of overall packet sizes within conversation
+23. subflow_fwd_pkts   : Average forward packets in sub-flow conversations
+
+----------------------------------------------------------------------------------------------------
+INTERNAL MONITORED ENTERPRISE ASSETS & ATTACKER GEOGRAPHY:
+----------------------------------------------------------------------------------------------------
+Protected Infrastructure:
+- DMZ Web Cluster         : 10.0.1.10 (Ports 80, 443)
+- Core SQL Database Server: 10.0.1.20 (Ports 5432, 1433)
+- Active Directory / Auth : 10.0.1.5  (Ports 88, 389, 22)
+- API Microservices GW    : 10.0.1.50 (Ports 8080, 8443)
+- Internal Workstations   : 10.0.2.15, 10.0.2.22, 10.0.2.58, 10.0.2.104, 10.0.2.165
+
+Adversary GeoIP Origins (Mapped on Global Threat Map):
+- Ashburn, USA            : 198.51.100.x  (Lat 39.0438, Lon -77.4874)
+- Frankfurt, Germany      : 185.220.101.x (Lat 50.1109, Lon 8.6821)
+- Moscow, Russia          : 91.109.25.x   (Lat 55.7558, Lon 37.6173)
+- Beijing, China          : 202.108.22.x  (Lat 39.9042, Lon 116.4074)
+- Amsterdam, Netherlands  : 77.247.110.x  (Lat 52.3676, Lon 4.9041)
+- Sao Paulo, Brazil       : 177.136.250.x (Lat -23.5505, Lon -46.6333)
+- London, United Kingdom  : 82.165.197.x  (Lat 51.5074, Lon -0.1278)
+
+
+====================================================================================================
+6. MACHINE LEARNING ARCHITECTURE & MULTI-MODEL BENCHMARK
+====================================================================================================
+In academic evaluations, external examiners require comparative justification rather than blindly 
+deploying a single algorithm. The platform trains and benchmarks FOUR distinct machine learning 
+architectures on 2,400 unseen test samples (stratified 80/20 train/test split):
+
+----------------------------------------------------------------------------------------------------
+ACADEMIC MULTI-MODEL COMPARATIVE BENCHMARK (ml/metrics.json):
+----------------------------------------------------------------------------------------------------
+Model Architecture           Accuracy  Macro F1  Precision  Recall   Inference Latency  Train Time  Status
+----------------------------------------------------------------------------------------------------
+Random Forest Classifier     99.50%    99.37%    99.24%     99.49%   16.86 microseconds  0.63s      ACTIVE
+Hist Gradient Boosting       99.50%    99.37%    99.24%     99.49%   30.12 microseconds  5.34s      Benchmark
+Multi-Layer Perceptron (MLP) 99.00%    98.73%    98.66%     98.79%    2.89 microseconds  9.95s      Benchmark
+Logistic Regression Baseline 98.38%    97.90%    97.72%     98.09%    0.73 microseconds  0.25s      Baseline
+
+----------------------------------------------------------------------------------------------------
+RATIONALE FOR SELECTING RANDOM FOREST FOR PRODUCTION:
+----------------------------------------------------------------------------------------------------
+1. Ensemble Robustness: Random Forest builds 100 decorrelated decision trees with bootstrap aggregation 
+   (bagging), making it immune to single-feature overfitting.
+2. Ultra-Low Latency: At 16.86 microseconds per sample, the model can evaluate over 59,000 flows per 
+   second in software without GPU hardware acceleration.
+3. Native Support for SHAP TreeExplainer: Enables exact polynomial-time game-theoretic feature 
+   attributions (whereas neural nets require slow kernel estimations).
+
+----------------------------------------------------------------------------------------------------
+CLASS-WISE CLASSIFICATION REPORT (RANDOM FOREST ON 2,400 TEST FLOWS):
+----------------------------------------------------------------------------------------------------
+Traffic Class     Precision   Recall      F1-Score    Test Support
+----------------------------------------------------------------------------------------------------
+Benign            99.52%      99.05%      99.28%      840 samples
+Botnet           100.00%     100.00%     100.00%      120 samples
+Brute Force      100.00%     100.00%     100.00%      288 samples
+DDoS             100.00%     100.00%     100.00%      600 samples
+PortScan         100.00%     100.00%     100.00%      360 samples
+Web Attack        95.92%      97.92%      96.91%      192 samples
+----------------------------------------------------------------------------------------------------
+OVERALL MACRO     99.24%      99.49%      99.37%      2,400 samples
+
+----------------------------------------------------------------------------------------------------
+TOP 8 MOST INFLUENTIAL FLOW FEATURES (GINI IMPORTANCE):
+----------------------------------------------------------------------------------------------------
+1. pkt_len_variance   (0.1249) : Distinguishes fixed-length floods from variable web payloads.
+2. bwd_iat_mean       (0.1027) : Measures server response timing (abnormally high in floods).
+3. flow_iat_mean      (0.0877) : Average pause between packets; highlights botnet beaconing.
+4. fwd_iat_mean       (0.0804) : Forward inter-arrival time; catches aggressive port probes.
+5. flow_iat_std       (0.0729) : Standard deviation of timing; low in automated bot scripts.
+6. fwd_header_len     (0.0649) : High header overhead indicates TCP flag probing.
+7. subflow_fwd_pkts   (0.0640) : Burst size indicator.
+8. bwd_pkt_len_mean   (0.0538) : Identifies zero-byte responses in half-open SYN floods.
+
+
+====================================================================================================
+7. EXPLAINABLE AI (XAI) & SHAP FEATURE ATTRIBUTION
+====================================================================================================
+In real-world cybersecurity, black-box AI is dangerous: an alert that cannot be explained leads to 
+analyst fatigue and mistrust. 
+
+The platform integrates SHAP (SHapley Additive exPlanations) directly into the investigation drawer:
+1. Engine: shap.TreeExplainer (backend/app/xai_service.py).
+2. Theory: Based on cooperative game theory (Lloyd Shapley, Nobel Memorial Prize). It treats each 
+   of the 22 flow features as players in a game and computes their marginal contribution to the 
+   model's prediction difference from the baseline expected value.
+3. Visualization: When an analyst opens a threat drawer and clicks "Calculate SHAP", the backend 
+   computes local Shapley values:
+   - Red bars (Positive SHAP): Features pushing the prediction towards this attack class (e.g. 
+     high SYN count, zero backward bytes, short duration).
+   - Green bars (Negative SHAP): Features that opposed this classification.
+4. Performance: Uses TreeSHAP, computing exact Shapley values in O(T * L * D^2) time instead of 
+   exponential sampling time.
+
+
+====================================================================================================
+8. GENERATIVE AI ASSISTANT (GOOGLE GEMINI 1.5 FLASH)
+====================================================================================================
+The platform incorporates Generative AI (backend/app/ai_service.py) acting as a virtual Tier-1 SOC 
+Analyst:
+1. LLM Model: Google Gemini 1.5 Flash.
+2. Endpoint: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
+3. Execution: Uses Python standard library 'urllib.request' with secure 'x-goog-api-key' request 
+   headers, eliminating external SDK dependency bloat.
+4. Prompt Engineering: Feeds the threat classification, adversary IP, target asset, severity, 
+   confidence, and key network flow metrics into a strict 40-word constraint prompt.
+5. Output: Produces an actionable, jargon-free business impact explanation and incident containment 
+   recommendation.
+6. Resilient Fallback: If no GEMINI_API_KEY is supplied or network requests time out (>5s), the 
+   engine seamlessly falls back to pre-built contextual templates, ensuring the application NEVER 
+   crashes or throws unhandled 500 errors during a viva demonstration.
+
+
+====================================================================================================
+9. NETWORK PACKET INGESTION & ZERO-DEPENDENCY PCAP ENGINE
+====================================================================================================
+A flagship feature for examiner demonstrations is the Web UI Drag-and-Drop PCAP Ingestion engine:
+- File Location: src/pcap_analyzer.py
+- API Endpoint : POST /pcap/upload
+
+----------------------------------------------------------------------------------------------------
+HOW THE ZERO-DEPENDENCY BINARY PACKET PARSER OPERATES:
+----------------------------------------------------------------------------------------------------
+Standard tools like Wireshark or Scapy require heavy C libraries (libpcap/Npcap). Our engine is 
+written in 100% pure Python standard library using 'struct.unpack':
+
+1. PCAP Global Header (24 Bytes):
+   - Unpacks 4-byte Magic Number (0xa1b2c3d4 or 0xd4c3b2a1).
+   - Validates major version (2), minor version (4), snapshot length (65535), and LinkType (1 = Ethernet).
+2. Packet Header (16 Bytes per packet):
+   - Unpacks timestamp seconds (ts_sec), microseconds (ts_usec), and captured packet length (incl_len).
+3. Ethernet Frame Header (14 Bytes):
+   - Strips 6-byte Destination MAC, 6-byte Source MAC.
+   - Validates EtherType (0x0800 = IPv4). Skips non-IPv4 frames.
+4. IPv4 Header (Minimum 20 Bytes):
+   - Parses Version and Header Length (IHL).
+   - Extracts Protocol (Byte 9: 6 for TCP, 17 for UDP).
+   - Unpacks Source IP and Destination IP via socket.inet_ntoa().
+5. TCP Header (Minimum 20 Bytes):
+   - Unpacks Source Port and Destination Port.
+   - Extracts TCP Control Flags (Byte 13): Bitwise AND for SYN (0x02), RST (0x04), ACK (0x10).
+6. Flow Reconstruction:
+   - Groups packets by their 5-tuple: (Source IP, Destination IP, Destination Port, Protocol).
+   - Tracks packet count, byte volume, duration, and control flag counters.
+7. Feature Vector Synthesis:
+   - Transforms the conversational metrics into the 22-dimensional feature vector.
+   - Evaluates Random Forest classifier, tags with MITRE ATT&CK technique, writes to database, and 
+     broadcasts alert via WebSocket.
+
+
+====================================================================================================
+10. LIVE HARDWARE NETWORK SNIFFER & TRAFFIC SIMULATION
+====================================================================================================
+To demonstrate real-time dynamic behavior on physical hardware:
+
+1. Live Hardware Network Sniffer (src/live_sniffer.py):
+   - Binds directly to the physical network interface:
+     * Windows: socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_IP) with SIO_RCVALL 
+       promiscuous mode.
+     * Linux: socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(0x0800)).
+   - Captures raw wire packets, calculates flow features, triggers ML inference, and logs alerts.
+   - Privilege Fallback: If run without Administrator/Root permissions, it gracefully switches to an 
+     active network loopback probe generator so the live demonstration continues smoothly.
+
+2. Live Traffic Feed Injector (src/simulate_live_traffic.py):
+   - Can be run as a background task to simulate incoming real-time network traffic bursts.
+   - Samples 3-5 random flows from the benchmark dataset, runs batch ML inference, assigns UTC 
+     timestamps, and inserts them directly into the database.
+
+
+====================================================================================================
+11. BACKEND REST API & WEBSOCKET ARCHITECTURE (FASTAPI)
+====================================================================================================
+The backend service (backend/app/main.py) provides 14 REST endpoints and 1 persistent WebSocket stream:
+
+----------------------------------------------------------------------------------------------------
+COMPLETE API ENDPOINT CATALOG:
+----------------------------------------------------------------------------------------------------
+Method  Path                    Description
+----------------------------------------------------------------------------------------------------
+GET     /                       Health check and service status
+GET     /health                 Health probe returning service uptime
+GET     /threats                Paginated, searchable, filterable threat logs (page, limit, severity, 
+                                attack_type, status, search, exclude_normal)
+GET     /threats/summary        Severity breakdown counts (critical, high, medium, low, blocked)
+GET     /threats/distribution   Attack category distribution counts (grouped by attack_type)
+GET     /threats/trend          Time-series aggregated incident counts (hourly or daily buckets)
+GET     /threats/map            Active geographic attack origins (country, city, lat, lon, count)
+GET     /threats/{id}           Detailed incident data for a single threat ID
+PATCH   /threats/{id}           Update threat status (open/investigating/resolved) or AI explanation
+POST    /threats/{id}/explain   Generate/cache on-demand Google Gemini AI explanation
+GET     /model/metrics          Retrieve multi-model benchmark results, latency, and confusion matrix
+POST    /threats/{id}/block     Automated firewall containment (with optional Windows netsh enforcement)
+GET     /threats/{id}/report/pdf Download formal SOC Forensic Incident Audit Report in PDF format
+GET     /threats/{id}/rules     Generate Windows netsh, Linux iptables, Suricata, and Snort drop syntax
+POST    /pcap/upload            Drag-and-drop .pcap file upload & flow analysis (or 1-click demo sample)
+WS      /ws/threats             Persistent bidirectional WebSocket stream pushing real-time alerts
+
+
+====================================================================================================
+12. FRONTEND SOC DASHBOARD ARCHITECTURE (REACT 19 + VITE)
+====================================================================================================
+The user interface is structured as an interactive command console with 5 primary views:
+
+1. Overview Page (frontend/src/pages/Overview.jsx):
+   - Metric Summary Cards: Real-time counts for Total Incidents, Critical, High, Medium, Low, Blocked.
+   - Global Threat Map (components/GlobalThreatMap.jsx): Interactive SVG world map plotting geographic 
+     adversary vectors with animated arc trajectories terminating at the protected data center.
+   - Attack Distribution Chart (components/DistributionChart.jsx): Visual breakdown of active threats.
+   - Recent Threats Table (components/RecentThreats.jsx): High-priority active alerts with quick actions.
+
+2. Alerts Page (frontend/src/pages/Alerts.jsx):
+   - Triage grid for all detected threats.
+   - Multi-parameter filtering (Severity, Attack Type, Status, Text Search).
+   - "Ingest PCAP Capture" button opening the binary file upload modal.
+
+3. Logs Page (Route: /logs):
+   - Comprehensive audit trail of all network conversations, including benign normal traffic.
+
+4. Analytics Page (frontend/src/pages/Analytics.jsx):
+   - Historical time-series trend charts comparing incident volume by severity over time.
+   - Threat velocity and attack frequency metrics using Recharts.
+
+5. Models (AI) Page (frontend/src/pages/Models.jsx):
+   - Multi-Model Academic Comparative Benchmark table comparing Random Forest, Hist Gradient Boosting, 
+     MLP Neural Network, and Logistic Regression on accuracy, F1, latency, and training time.
+   - Interactive 6x6 Confusion Matrix displaying true positive vs. false positive distributions.
+   - Top 8 Feature Importances bar chart.
+
+6. Threat Detail Modal / Drawer (frontend/src/components/ThreatDetailModal.jsx):
+   - Displays all 22 raw flow metrics.
+   - XAI SHAP waterfall visualizer with directional feature attribution bars.
+   - Google Gemini generative incident explanation with 1-click regeneration.
+   - Multi-platform firewall rule export (Windows netsh, Linux iptables, Suricata, Snort).
+   - 1-Click "Contain Host" active firewall execution button.
+   - 1-Click "PDF Report" instant forensic download button.
+
+7. Real-Time WebSocket Listener (frontend/src/App.jsx):
+   - Establishes persistent connection to ws://localhost:8000/ws/threats.
+   - Displays animated top toast banner upon receiving live PCAP or sniffer threats.
+   - Triggers automatic background table refreshes via custom window events ('soc-threat-created').
+
+
+====================================================================================================
+13. ACTIVE FIREWALL CONTAINMENT & SOAR INTEGRATION
+====================================================================================================
+The platform functions not just as a passive monitor (IDS), but as an active defense system (IPS/SOAR):
+
+1. Host OS Firewall Containment:
+   - When an analyst clicks "Block Attacker IP" with OS enforcement enabled, the backend executes:
+     subprocess.run(["netsh", "advfirewall", "firewall", "add", "rule", 
+                     f"name=SOC_BLOCK_{ip}", "dir=in", "action=block", f"remoteip={ip}"])
+   - Drops all incoming packets from that source IP address at the kernel network stack level.
+   - Updates the database record to mark 'is_blocked = True' and 'status = resolved'.
+
+2. Multi-Platform Rule Syntax Generator (GET /threats/{id}/rules):
+   - Windows Netsh  : netsh advfirewall firewall add rule name="SOC_BLOCK_{IP}" dir=in action=block remoteip={IP}
+   - Linux IPTables : iptables -A INPUT -s {IP} -j DROP
+   - Suricata Rule  : drop ip {IP} any -> any any (msg:"SOC Auto-Containment IP {IP}"; sid:100{ID}; rev:1;)
+   - Snort Rule     : drop ip {IP} any -> any any (msg:"SOC Auto-Containment IP {IP}"; sid:200{ID}; rev:1;)
+
+
+====================================================================================================
+14. FORENSIC INCIDENT AUDIT REPORTING ENGINE (REPORTLAB PDF)
+====================================================================================================
+For formal security operations, analysts must export documentation for management and law enforcement.
+- File Location: backend/app/report_service.py
+- API Endpoint : GET /threats/{id}/report/pdf
+
+The ReportLab engine generates a publication-grade, multi-page vector PDF containing:
+1. Executive Header: Official SOC banner, classification level, and confidentiality disclosures.
+2. Incident Metadata Table: Incident ID, UTC timestamp, attack classification, severity rating, 
+   adversary IP, target internal IP, ML model confidence score, and firewall containment status.
+3. Attacker Geolocation: Country, city, and geographical coordinates.
+4. AI Forensic Incident Summary: Plain-English root cause assessment and containment recommendations.
+5. 22-Dimensional CICFlowMeter Telemetry Matrix: Structured tabular display of duration, packet counts, 
+   byte rates, TCP control flag states, inter-arrival times, and length variances.
+6. Digital Audit Trail: Generation timestamp, CIC-IDS2017 standard certification, and cryptographic 
+   SHA-256 audit signature hash.
+
+
+====================================================================================================
+15. COMPLETE REPOSITORY DIRECTORY & FILE BREAKDOWN
+====================================================================================================
+ai-cyber-threat-detection-platform-main/
+│
+├── backend/                              # Python Backend Service
+│   ├── app/
+│   │   ├── __init__.py                   # Package marker
+│   │   ├── ai_service.py                 # Google Gemini 1.5 Flash client & template fallbacks
+│   │   ├── config.py                     # Environment variables & database URI loader
+│   │   ├── database.py                   # SQLAlchemy engine, session maker, connection pool
+│   │   ├── main.py                       # FastAPI application, REST endpoints & WebSocket manager
+│   │   ├── models.py                     # SQLAlchemy Threat ORM model definition
+│   │   ├── report_service.py             # ReportLab PDF incident forensic report generator
+│   │   ├── schemas.py                    # Pydantic request/response validation schemas
+│   │   └── xai_service.py                # SHAP TreeExplainer local feature attribution service
+│   ├── scripts/
+│   │   └── seed.py                       # Database seeder (loads 12,000 records & runs batch inference)
+│   └── requirements.txt                  # Backend Python dependencies
+│
+├── data/                                 # Telemetry & Capture Data
+│   ├── threats_cleaned.csv               # 12,000 synthetic CIC-IDS2017 flow telemetry rows
+│   ├── threats_dataset.xlsx              # Excel formatted telemetry export
+│   └── live_sample.pcap                  # Demonstration binary packet capture file
+│
+├── frontend/                             # React 19 + Vite Frontend Console
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── DistributionChart.jsx     # Recharts threat distribution breakdown
+│   │   │   ├── EmptyState.jsx            # Clean state placeholder for zero data
+│   │   │   ├── GlobalThreatMap.jsx       # SVG World map with animated attack vectors
+│   │   │   ├── Loader.jsx                # Loading spinner with SOC radar styling
+│   │   │   ├── PcapUploadModal.jsx       # Drag-and-drop PCAP upload modal & 1-click analyzer
+│   │   │   ├── RecentThreats.jsx         # Latest threat incidents table with drawer triggers
+│   │   │   ├── SummaryCards.jsx          # Severity count cards (Critical, High, Medium, Low)
+│   │   │   └── ThreatDetailModal.jsx     # Full investigation drawer (XAI, AI, PDF, Firewall)
+│   │   ├── pages/
+│   │   │   ├── Alerts.jsx                # Filterable & searchable threat alerts table
+│   │   │   ├── Analytics.jsx             # Time-series trend graphs & category analytics
+│   │   │   ├── Models.jsx                # Multi-model comparative benchmark & confusion matrix
+│   │   │   ├── Overview.jsx              # Main dashboard overview with map, cards & recent alerts
+│   │   │   └── Settings.jsx              # Platform settings & API endpoint configuration
+│   │   ├── App.css                       # Application-specific styling
+│   │   ├── App.jsx                       # Root shell, sidebar navigation, WebSocket toast listener
+│   │   ├── index.css                     # Tailwind CSS base directives and font styling
+│   │   └── main.jsx                      # React 19 DOM entrypoint
+│   ├── package.json                      # Frontend dependencies & scripts
+│   ├── tailwind.config.js                # Tailwind configuration
+│   └── vite.config.js                    # Vite configuration
+│
+├── ml/                                   # Machine Learning Artifacts
+│   ├── model.pkl                         # Serialized Random Forest pipeline (StandardScaler + RF)
+│   └── metrics.json                      # Multi-model benchmark comparisons, confusion matrix & metrics
+│
+├── scripts/
+│   └── generate_viva_pdf.py              # Generator for the comprehensive Viva examination PDF manual
+│
+├── src/                                  # Core Pipeline & Ingestion Scripts
+│   ├── data_pipeline.py                  # CIC-IDS2017 flow dataset generator (22 features)
+│   ├── train_model.py                    # Multi-model trainer (RF, HistGradBoost, MLP, LogReg)
+│   ├── predict.py                        # Single-flow inference & dynamic risk severity assessment
+│   ├── pcap_analyzer.py                  # Zero-dependency binary PCAP flow parser & classifier
+│   ├── live_sniffer.py                   # Live physical interface packet sniffer (raw sockets)
+│   └── simulate_live_traffic.py          # Real-time traffic injection simulator
+│
+├── threats.db                            # SQLite database file containing seeded incidents
+├── render.yaml                           # Cloud deployment configuration for Render.com
+├── README.md                             # Comprehensive project markdown documentation
+└── PROJECT_EXPLANATION.txt               # This complete technical reference document
+
+
+====================================================================================================
+16. INSTALLATION, CONFIGURATION & STEP-BY-STEP EXECUTION GUIDE
+====================================================================================================
+----------------------------------------------------------------------------------------------------
+STEP 1: PREREQUISITES
+----------------------------------------------------------------------------------------------------
+- Python 3.10 or higher installed (Tested on Python 3.11 and 3.13)
+- Node.js version 18.0 or higher with npm
+
+----------------------------------------------------------------------------------------------------
+STEP 2: ENVIRONMENT CONFIGURATION
+----------------------------------------------------------------------------------------------------
+Create a '.env' file in the project root:
+```env
+# Optional: Database connection string (defaults to local SQLite if omitted)
+DATABASE_URL=sqlite:///./threats.db
+
+# Optional: Google Gemini API key for live AI incident analysis
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+----------------------------------------------------------------------------------------------------
+STEP 3: INSTALL PYTHON DEPENDENCIES
+----------------------------------------------------------------------------------------------------
+```bash
+pip install -r backend/requirements.txt
+pip install reportlab shap
+```
+
+----------------------------------------------------------------------------------------------------
+STEP 4: GENERATE DATASET, TRAIN MODELS & SEED DATABASE
+----------------------------------------------------------------------------------------------------
+Execute the pipeline commands in order:
+```bash
+# 1. Synthesize the 12,000-record CIC-IDS2017 flow dataset
+python src/data_pipeline.py
+
+# 2. Train and benchmark the 4 machine learning models (RF, HistGradBoost, MLP, LogReg)
+python src/train_model.py
+
+# 3. Seed the database with 12,000 incidents, GeoIP origins, and MITRE ATT&CK tags
+python backend/scripts/seed.py
+```
+
+----------------------------------------------------------------------------------------------------
+STEP 5: START THE BACKEND SERVER (FASTAPI + WEBSOCKETS)
+----------------------------------------------------------------------------------------------------
+In Terminal 1:
+```bash
+python -m uvicorn backend.app.main:app --port 8000 --reload
+```
+- API is running at: http://127.0.0.1:8000/
+- Interactive Swagger API docs: http://127.0.0.1:8000/docs
+
+----------------------------------------------------------------------------------------------------
+STEP 6: START THE FRONTEND DASHBOARD (REACT + VITE)
+----------------------------------------------------------------------------------------------------
+In Terminal 2:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+- Access the SOC Dashboard at: http://localhost:5173/
+- Verify the green "WS STREAM SYNC" badge is lit in the top header.
+
+
+====================================================================================================
+17. EVALUATOR & VIVA EXAMINATION QUESTIONS WITH ANSWERS
+====================================================================================================
+----------------------------------------------------------------------------------------------------
+COMPUTER NETWORKS (CN) QUESTIONS:
+----------------------------------------------------------------------------------------------------
+Q1: What is a Network Flow, and what constitutes the 5-Tuple?
+A1: A network flow is a sequence of packets transferred between two endpoints within a specific time 
+    window sharing the identical 5-tuple:
+    (1) Source IP, (2) Destination IP, (3) Source Port, (4) Destination Port, (5) Protocol (TCP/UDP).
+    Rather than inspecting individual isolated packets, flow-based analysis tracks bidirectional 
+    conversations and computes statistical features (packet rates, byte rates, inter-arrival times), 
+    enabling detection even when payloads are encrypted with TLS/HTTPS.
+
+Q2: How does a TCP SYN Flood work, and how does your model detect it?
+A2: In normal TCP three-way handshake: Client sends SYN -> Server responds SYN-ACK -> Client sends ACK.
+    In a SYN Flood (MITRE T1498), the attacker sends thousands of SYN packets from spoofed IPs without 
+    returning the final ACK. The server's half-open connection backlog queue becomes exhausted.
+    Our model detects this via three primary features:
+    (a) syn_flag_cnt = 1, (b) tot_bwd_pkts ~ 0 (down_up_ratio = 0.0), (c) extremely short flow_iat_mean.
+
+Q3: How does your PCAP parser read packets without third-party tools like Scapy?
+A3: Using Python's built-in 'struct.unpack' module. We read the 24-byte PCAP global header to verify 
+    the magic number (0xa1b2c3d4). Then, for each packet, we read the 16-byte packet header to determine 
+    length, skip the 14-byte Ethernet header, unpack the 20-byte IPv4 header to extract IPs and protocol, 
+    and unpack the 20-byte TCP header to extract ports and flags (Byte 13).
+
+----------------------------------------------------------------------------------------------------
+MACHINE LEARNING & CYBERSECURITY QUESTIONS:
+----------------------------------------------------------------------------------------------------
+Q4: Why did you choose Random Forest over Deep Learning (MLP)?
+A4: As shown in our academic benchmark (ml/metrics.json):
+    - Random Forest achieved 99.50% accuracy compared to 99.00% for MLP.
+    - Random Forest trained in 0.63 seconds compared to 9.95 seconds for MLP (15x faster).
+    - Random Forest supports exact polynomial-time SHAP TreeExplainer, giving our analysts true 
+      mathematical explainability, whereas neural networks are black-boxes requiring slow approximations.
+
+Q5: What is Explainable AI (XAI) and why is SHAP needed in a SOC?
+A5: When an AI flags an alert, a SOC analyst cannot take high-impact containment actions (like blocking 
+    an IP or isolating a server) without understanding the reasoning. SHAP (SHapley Additive 
+    exPlanations) calculates the game-theoretic contribution of each network feature. For example, it 
+    shows the analyst: "This flow was classified as DDoS because packet length variance was 0 and SYN 
+    count was 1, contributing +0.42 towards the DDoS prediction."
+
+Q6: What is MITRE ATT&CK and how is it integrated?
+A6: MITRE ATT&CK is the globally recognized cybersecurity knowledge base of adversary tactics and 
+    techniques. We map every detected attack type to its official technique ID:
+    - DDoS        -> T1498 (Network Denial of Service)
+    - PortScan    -> T1046 (Network Service Discovery)
+    - Brute Force -> T1110 (Brute Force Credentials)
+    - Web Attack  -> T1190 (Exploit Public-Facing Application)
+    - Botnet      -> T1071 (Application Layer Protocol - C2)
+
+Q7: What is SOAR and how does your platform implement it?
+A7: SOAR stands for Security Orchestration, Automation, and Response. Instead of requiring the analyst 
+    to manually log into routers or firewalls, our platform provides active containment: clicking 
+    "Block Attacker IP" invokes the Windows Host Firewall ('netsh advfirewall') or outputs ready-to-run 
+    Linux IPTables and Suricata IDS rules.
+
+====================================================================================================
+                              END OF TECHNICAL SPECIFICATION FILE
+====================================================================================================

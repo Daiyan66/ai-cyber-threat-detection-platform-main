@@ -1,5 +1,6 @@
 import io
 from datetime import datetime, timezone
+from xml.sax.saxutils import escape as xml_escape
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import (
@@ -79,40 +80,50 @@ def generate_threat_pdf_report(threat) -> io.BytesIO:
         )
     )
     
+    # Safe strings escaped for XML
+    safe_attack = xml_escape(str(threat.attack_type or 'Unknown'))
+    safe_src = xml_escape(str(threat.source_ip or 'Unknown'))
+    safe_dst = xml_escape(str(threat.destination_ip or 'Unknown'))
+    safe_sev = xml_escape(str(threat.severity or 'medium')).upper()
+    safe_status = xml_escape(str(threat.status or 'open')).upper()
+    safe_mitre = xml_escape(str(threat.mitre_id or 'N/A'))
+    safe_city = xml_escape(str(threat.geo_city or 'Unknown'))
+    safe_country = xml_escape(str(threat.geo_country or 'Unknown'))
+
     summary_data = [
         [
             Paragraph("<b>Incident ID:</b>", body_style),
             Paragraph(f"#{threat.id}", body_style),
             Paragraph("<b>Classification:</b>", body_style),
-            Paragraph(f"<b>{threat.attack_type}</b>", body_style)
+            Paragraph(f"<b>{safe_attack}</b>", body_style)
         ],
         [
             Paragraph("<b>Detection Time (UTC):</b>", body_style),
             Paragraph(threat.timestamp.strftime("%Y-%m-%d %H:%M:%S") if threat.timestamp else "N/A", body_style),
             Paragraph("<b>Severity Rating:</b>", body_style),
-            Paragraph(f"<font color='{sev_color}'><b>{threat.severity.upper()}</b></font>", body_style)
+            Paragraph(f"<font color='{sev_color}'><b>{safe_sev}</b></font>", body_style)
         ],
         [
             Paragraph("<b>Adversary Source IP:</b>", body_style),
-            Paragraph(f"<font color='#0284c7'><b>{threat.source_ip}</b></font>", body_style),
+            Paragraph(f"<font color='#0284c7'><b>{safe_src}</b></font>", body_style),
             Paragraph("<b>ML Confidence:</b>", body_style),
             Paragraph(f"{threat.confidence * 100:.2f}%", body_style)
         ],
         [
             Paragraph("<b>Target Internal Asset:</b>", body_style),
-            Paragraph(f"<b>{threat.destination_ip}</b>", body_style),
+            Paragraph(f"<b>{safe_dst}</b>", body_style),
             Paragraph("<b>Investigation Status:</b>", body_style),
-            Paragraph(threat.status.upper(), body_style)
+            Paragraph(safe_status, body_style)
         ],
         [
             Paragraph("<b>MITRE ATT&CK ID:</b>", body_style),
-            Paragraph(f"<b>{threat.mitre_id or 'N/A'}</b>", body_style),
+            Paragraph(f"<b>{safe_mitre}</b>", body_style),
             Paragraph("<b>Firewall Containment:</b>", body_style),
             Paragraph("<font color='#16a34a'><b>ACTIVE (BLOCKED)</b></font>" if threat.is_blocked else "<font color='#e11d48'>UNBLOCKED / MONITORING</font>", body_style)
         ],
         [
             Paragraph("<b>Attacker Origin GeoIP:</b>", body_style),
-            Paragraph(f"{threat.geo_city or 'Unknown'}, {threat.geo_country or 'Unknown'}", body_style),
+            Paragraph(f"{safe_city}, {safe_country}", body_style),
             Paragraph("<b>Geo Coordinates:</b>", body_style),
             Paragraph(f"Lat: {threat.geo_lat or 0.0}, Lon: {threat.geo_lon or 0.0}", body_style)
         ]
@@ -130,12 +141,13 @@ def generate_threat_pdf_report(threat) -> io.BytesIO:
 
     # 3. AI Incident Assessment & Remediation
     story.append(Paragraph("Automated AI Forensic Analysis (Google Gemini & SOC Engine)", section_title_style))
-    ai_text = threat.ai_explanation or (
+    raw_ai_text = threat.ai_explanation or (
         f"Automated threat classification identifies an anomalous network conversation matching {threat.attack_type} patterns. "
         f"The connection exhibited characteristic high-velocity volumetric signatures and atypical flag distributions. "
         f"Recommended Action: Enforce firewall border isolation on {threat.source_ip}, review target system logs for ingress compromise, "
         f"and execute standard MITRE {threat.mitre_id or 'incident'} containment playbooks."
     )
+    ai_text = xml_escape(raw_ai_text)
     story.append(Paragraph(ai_text, body_style))
     story.append(Spacer(1, 15))
 

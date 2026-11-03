@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Settings as SettingsIcon, Sliders, Shield, Save } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 const Settings = () => {
   const [threshold, setThreshold] = useState(() => {
@@ -9,7 +10,7 @@ const Settings = () => {
     return parseInt(localStorage.getItem('soc_polling_interval') || '10', 10);
   });
   const [apiUrl, setApiUrl] = useState(() => {
-    return localStorage.getItem('soc_api_url') || (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000');
+    return getApiUrl();
   });
   const [saved, setSaved] = useState(false);
 

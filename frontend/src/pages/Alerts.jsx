@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Filter, Search, ChevronLeft, ChevronRight, ShieldAlert, UploadCloud } from 'lucide-react';
+import { Filter, Search, ChevronLeft, ChevronRight, UploadCloud } from 'lucide-react';
 
 import Loader from '../components/Loader';
 import EmptyState from '../components/EmptyState';
 import ThreatDetailModal from '../components/ThreatDetailModal';
 import PcapUploadModal from '../components/PcapUploadModal';
+import { getApiUrl } from '../utils/api';
 
 const Alerts = ({ showOnlyAttacks = false }) => {
   const [loading, setLoading] = useState(true);
@@ -25,8 +26,6 @@ const Alerts = ({ showOnlyAttacks = false }) => {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   
   const [selectedThreat, setSelectedThreat] = useState(null);
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
   // Debounce search input by 300ms
   useEffect(() => {
@@ -52,7 +51,7 @@ const Alerts = ({ showOnlyAttacks = false }) => {
       if (debouncedSearch) params.search = debouncedSearch;
       if (showOnlyAttacks) params.exclude_normal = true;
       
-      const res = await axios.get(`${API_URL}/threats`, { params });
+      const res = await axios.get(`${getApiUrl()}/threats`, { params });
       if (res.data && res.data.items) {
         setThreats(res.data.items);
         setTotal(res.data.total);
@@ -72,6 +71,12 @@ const Alerts = ({ showOnlyAttacks = false }) => {
   useEffect(() => {
     fetchThreats();
   }, [page, severity, attackType, status, debouncedSearch, showOnlyAttacks]);
+
+  useEffect(() => {
+    const handleNewThreat = () => fetchThreats();
+    window.addEventListener('soc-threat-created', handleNewThreat);
+    return () => window.removeEventListener('soc-threat-created', handleNewThreat);
+  }, []);
 
   // Reset page to 1 when filters change
   const handleFilterChange = (filterType, value) => {

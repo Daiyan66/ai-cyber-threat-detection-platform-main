@@ -15,17 +15,6 @@ const RecentThreats = ({ threats, onSelectThreat }) => {
     }
   };
 
-  const getStatusBadge = (status) => {
-    switch (status.toLowerCase()) {
-      case 'resolved':
-        return 'text-emerald-400 border-emerald-500/30';
-      case 'investigating':
-        return 'text-sky-400 border-sky-500/30';
-      default:
-        return 'text-rose-400 border-rose-500/30';
-    }
-  };
-
   const formatTimestamp = (isoString) => {
     const date = new Date(isoString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });

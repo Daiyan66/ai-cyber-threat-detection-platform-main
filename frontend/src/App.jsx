@@ -16,6 +16,7 @@ import Alerts from './pages/Alerts';
 import Analytics from './pages/Analytics';
 import Models from './pages/Models';
 import Settings from './pages/Settings';
+import { getWsUrl } from './utils/api';
 
 function App() {
   const location = useLocation();
@@ -30,8 +31,7 @@ function App() {
 
   // WebSocket Live Push Telemetry
   useEffect(() => {
-    const rawApi = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-    const wsUrl = rawApi.replace(/^http/, 'ws') + '/ws/threats';
+    const wsUrl = getWsUrl() + '/ws/threats';
 
     let socket;
     try {
@@ -54,7 +54,7 @@ function App() {
           console.error("WS Parse error:", e);
         }
       };
-    } catch (err) {
+    } catch (_err) {
       console.warn("WebSocket initialization fallback to standard polling");
     }
 

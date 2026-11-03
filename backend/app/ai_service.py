@@ -5,33 +5,50 @@ import urllib.error
 
 def get_template_explanation(attack_type, source_ip, destination_ip):
     """Fallback generator providing high-quality contextual sentences without an API key."""
-    templates = {
-        'DDoS': (
+    norm_type = (attack_type or '').strip().lower()
+    
+    if 'ddos' in norm_type or 'dos' in norm_type:
+        return (
             f"A massive flood of automated network traffic is coming from source IP {source_ip} targeting {destination_ip}, "
-            f"attempting to overload the system and make our web services unavailable for legitimate users."
-        ),
-        'Brute Force': (
-            f"An unusually high rate of repeated connection attempts was detected from {source_ip} targeting {destination_ip}, "
-            f"indicating an active attempt to guess authentication passwords and compromise credentials."
-        ),
-        'Port Scan': (
-            f"Host {source_ip} is probing multiple network ports on {destination_ip} in rapid succession, "
-            f"attempting to locate active services and discover open entry points for a potential attack."
-        ),
-        'Recon': (
-            f"Anomalous reconnaissance scanning was detected originating from {source_ip}, "
-            f"attempting to map our internal active network architecture and identify active server addresses."
-        ),
-        'Malware': (
-            f"Suspicious host-to-host network metrics indicate a potential malware execution or remote exploit attempt "
-            f"originating from {source_ip} targeting system {destination_ip} to gain administrative control."
-        ),
-        'Normal': (
-            f"Benign traffic flow verified between internal user at {source_ip} and target {destination_ip}, "
-            f"matching normal security policy baseline standards."
+            f"attempting to exhaust server bandwidth and make digital services unavailable for legitimate users."
         )
-    }
-    return templates.get(attack_type, f"Suspicious activity classified as {attack_type} was detected from {source_ip} targeting {destination_ip}.")
+    elif 'brute' in norm_type or 'patator' in norm_type:
+        return (
+            f"An unusually high rate of repeated connection attempts was detected from {source_ip} targeting {destination_ip}, "
+            f"indicating an active credential-stuffing or dictionary attack attempting to compromise system authentication."
+        )
+    elif 'port' in norm_type or 'scan' in norm_type:
+        return (
+            f"Host {source_ip} is probing multiple network ports on {destination_ip} in rapid succession, "
+            f"attempting to discover open service listeners and identify vulnerable entry points for a breach."
+        )
+    elif 'bot' in norm_type:
+        return (
+            f"Suspicious coordinated beaconing patterns from {source_ip} indicate zombie botnet infection communicating "
+            f"with command-and-control infrastructure against host {destination_ip}."
+        )
+    elif 'web' in norm_type or 'sql' in norm_type or 'xss' in norm_type:
+        return (
+            f"Malicious web application payloads (SQL injection, XSS, or path traversal) were detected from {source_ip} "
+            f"targeting application endpoints on {destination_ip}."
+        )
+    elif 'recon' in norm_type or 'probe' in norm_type:
+        return (
+            f"Anomalous reconnaissance scanning was detected originating from {source_ip}, "
+            f"attempting to map internal network subnets and footprint target infrastructure on {destination_ip}."
+        )
+    elif 'malware' in norm_type or 'trojan' in norm_type:
+        return (
+            f"Suspicious host-to-host network metrics indicate a potential malware execution or lateral movement attempt "
+            f"originating from {source_ip} targeting system {destination_ip}."
+        )
+    elif 'benign' in norm_type or 'normal' in norm_type:
+        return (
+            f"Benign traffic flow verified between internal host {source_ip} and destination {destination_ip}, "
+            f"matching authorized operational security baselines."
+        )
+    else:
+        return f"Suspicious network anomaly classified as {attack_type} was detected from {source_ip} targeting {destination_ip}."
 
 def generate_threat_explanation(threat):
     """
@@ -49,8 +66,14 @@ def generate_threat_explanation(threat):
     # Construct a contextual prompt
     features_summary = ""
     if threat.features:
-        # Include key metrics in the prompt to help the LLM customize the reason
-        features_summary = f"Packet Size: {threat.features.get('packet_size', 0)} bytes, Duration: {threat.features.get('duration', 0)}s, IP connection counts: {threat.features.get('count', 0)}, SYN error rate: {threat.features.get('serror_rate', 0)}"
+        feat = threat.features
+        duration = feat.get('flow_duration', feat.get('duration', 0))
+        pkts = feat.get('tot_fwd_pkts', feat.get('count', 0))
+        rate = feat.get('flow_byts_s', feat.get('packet_size', 0))
+        syn = feat.get('syn_flag_cnt', feat.get('serror_rate', 0))
+        port = feat.get('port', 'N/A')
+        proto = feat.get('protocol', 'TCP')
+        features_summary = f"Port: {port}, Protocol: {proto}, Flow Duration: {duration}us, Fwd Packets: {pkts}, Bytes/sec: {rate}, SYN Flags: {syn}"
         
     prompt = (
         f"Explain in exactly one plain-English sentence what this network security alert means and why it is concerning, "

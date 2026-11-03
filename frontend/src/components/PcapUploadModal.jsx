@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import { UploadCloud, FileText, CheckCircle2, AlertTriangle, X, ShieldAlert, Cpu, Sparkles, Play } from 'lucide-react';
+import { UploadCloud, CheckCircle2, AlertTriangle, X, Cpu, Play } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 const PcapUploadModal = ({ isOpen, onClose, onPcapProcessed }) => {
   const [dragActive, setDragActive] = useState(false);
@@ -9,8 +10,6 @@ const PcapUploadModal = ({ isOpen, onClose, onPcapProcessed }) => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
   if (!isOpen) return null;
 
@@ -52,12 +51,13 @@ const PcapUploadModal = ({ isOpen, onClose, onPcapProcessed }) => {
 
     try {
       let res;
+      const url = getApiUrl();
       if (useDemo || !file) {
-        res = await axios.post(`${API_URL}/pcap/upload?demo=true`);
+        res = await axios.post(`${url}/pcap/upload?demo=true`);
       } else {
         const formData = new FormData();
         formData.append('file', file);
-        res = await axios.post(`${API_URL}/pcap/upload`, formData, {
+        res = await axios.post(`${url}/pcap/upload`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       }

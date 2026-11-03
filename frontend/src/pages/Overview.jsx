@@ -8,6 +8,7 @@ import RecentThreats from '../components/RecentThreats';
 import Loader from '../components/Loader';
 import ThreatDetailModal from '../components/ThreatDetailModal';
 import GlobalThreatMap from '../components/GlobalThreatMap';
+import { getApiUrl } from '../utils/api';
 
 const Overview = () => {
   const [loading, setLoading] = useState(true);
@@ -19,17 +20,16 @@ const Overview = () => {
   
   const [selectedThreat, setSelectedThreat] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-
   const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
+      const url = getApiUrl();
       
       const [summaryRes, distRes, threatsRes] = await Promise.all([
-        axios.get(`${API_URL}/threats/summary`),
-        axios.get(`${API_URL}/threats/distribution`),
-        axios.get(`${API_URL}/threats?limit=8`)
+        axios.get(`${url}/threats/summary`),
+        axios.get(`${url}/threats/distribution`),
+        axios.get(`${url}/threats?limit=8`)
       ]);
       
       setSummary(summaryRes.data);
@@ -52,39 +52,34 @@ const Overview = () => {
       return saved ? Math.max(3, parseInt(saved, 10)) * 1000 : 10000;
     };
 
-    let timer = setInterval(() => {
-      // Quiet background refresh without flashing full loader
+    const refreshDataQuietly = () => {
+      const url = getApiUrl();
       Promise.all([
-        axios.get(`${API_URL}/threats/summary`),
-        axios.get(`${API_URL}/threats/distribution`),
-        axios.get(`${API_URL}/threats?limit=8`)
+        axios.get(`${url}/threats/summary`),
+        axios.get(`${url}/threats/distribution`),
+        axios.get(`${url}/threats?limit=8`)
       ]).then(([summaryRes, distRes, threatsRes]) => {
         setSummary(summaryRes.data);
         setDistribution(distRes.data);
         setRecentThreats(threatsRes.data.items || threatsRes.data);
       }).catch(console.error);
-    }, getIntervalMs());
+    };
+
+    let timer = setInterval(refreshDataQuietly, getIntervalMs());
 
     const handleSettingsUpdated = () => {
       clearInterval(timer);
-      timer = setInterval(() => {
-        Promise.all([
-          axios.get(`${API_URL}/threats/summary`),
-          axios.get(`${API_URL}/threats/distribution`),
-          axios.get(`${API_URL}/threats?limit=8`)
-        ]).then(([summaryRes, distRes, threatsRes]) => {
-          setSummary(summaryRes.data);
-          setDistribution(distRes.data);
-          setRecentThreats(threatsRes.data.items || threatsRes.data);
-        }).catch(console.error);
-      }, getIntervalMs());
+      refreshDataQuietly();
+      timer = setInterval(refreshDataQuietly, getIntervalMs());
     };
 
     window.addEventListener('soc-settings-updated', handleSettingsUpdated);
+    window.addEventListener('soc-threat-created', refreshDataQuietly);
 
     return () => {
       clearInterval(timer);
       window.removeEventListener('soc-settings-updated', handleSettingsUpdated);
+      window.removeEventListener('soc-threat-created', refreshDataQuietly);
     };
   }, []);
 
@@ -93,7 +88,7 @@ const Overview = () => {
     setRecentThreats(prev => prev.map(t => t.id === id ? updatedThreat : t));
     
     // Refresh stats summary
-    axios.get(`${API_URL}/threats/summary`).then(res => setSummary(res.data)).catch(console.error);
+    axios.get(`${getApiUrl()}/threats/summary`).then(res => setSummary(res.data)).catch(console.error);
     
     // Close modal
     setSelectedThreat(null);

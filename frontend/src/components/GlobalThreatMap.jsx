@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Globe, ShieldAlert, Crosshair, RefreshCw } from 'lucide-react';
+import { Globe, Crosshair, RefreshCw } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 const GlobalThreatMap = () => {
   const [points, setPoints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hovered, setHovered] = useState(null);
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
   // Target Datacenter (San Francisco, CA)
   const target = { lat: 37.7749, lon: -122.4194, name: "US West SOC Datacenter" };
@@ -15,7 +14,7 @@ const GlobalThreatMap = () => {
   const fetchMapData = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_URL}/threats/map`);
+      const res = await axios.get(`${getApiUrl()}/threats/map`);
       setPoints(res.data);
     } catch (err) {
       console.error("Failed to load map points:", err);
@@ -109,7 +108,6 @@ const GlobalThreatMap = () => {
             
             // Calculate bezier control point for natural trajectory arc
             const dx = targetCoords.x - origin.x;
-            const dy = targetCoords.y - origin.y;
             const cx = origin.x + dx * 0.5;
             const cy = Math.min(origin.y, targetCoords.y) - Math.abs(dx) * 0.2;
             

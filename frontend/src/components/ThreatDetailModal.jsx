@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   X, ShieldAlert, CheckCircle, Search, RefreshCw, Cpu, ShieldBan, 
   Globe, Tag, FileDown, Terminal, BarChart3, Copy, Check 
 } from 'lucide-react';
 import axios from 'axios';
+import { getApiUrl } from '../utils/api';
 
 const ThreatDetailModal = ({ threat, onClose, onUpdateStatus }) => {
   const [status, setStatus] = useState(threat.status);
@@ -27,7 +28,7 @@ const ThreatDetailModal = ({ threat, onClose, onUpdateStatus }) => {
   const [copiedRule, setCopiedRule] = useState(null);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+  const API_URL = getApiUrl();
 
   const handleStatusChange = async (newStatus) => {
     setUpdating(true);
@@ -253,10 +254,11 @@ const ThreatDetailModal = ({ threat, onClose, onUpdateStatus }) => {
                 <button
                   type="button"
                   onClick={handleFetchRules}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                  disabled={loadingRules}
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
                 >
-                  <Terminal className="w-3.5 h-3.5 text-sky-400" />
-                  <span>{showRules ? "Hide Rules" : "Firewall Rules"}</span>
+                  <Terminal className={`w-3.5 h-3.5 text-sky-400 ${loadingRules ? 'animate-pulse' : ''}`} />
+                  <span>{loadingRules ? "Loading..." : (showRules ? "Hide Rules" : "Firewall Rules")}</span>
                 </button>
 
                 {isBlocked ? (

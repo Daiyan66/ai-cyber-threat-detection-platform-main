@@ -183,6 +183,8 @@ def inspect_and_classify_flows(flow_records, commit_to_db=True):
             
             # Map into the 22 feature vector expected by Random Forest
             flow_vector = {
+                'port': fl['port'],
+                'protocol': fl['protocol'],
                 'flow_duration': duration_ms,
                 'tot_fwd_pkts': tot_fwd,
                 'tot_bwd_pkts': fl["bwd_pkts"],

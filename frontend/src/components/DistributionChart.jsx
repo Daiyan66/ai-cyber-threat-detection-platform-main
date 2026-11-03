@@ -1,6 +1,21 @@
 import React from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, CartesianGrid } from 'recharts';
 
+const DistributionTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const dataPoint = payload[0].payload;
+    return (
+      <div className="bg-slate-900/90 border border-slate-800 p-3 rounded-lg shadow-xl backdrop-blur-md">
+        <p className="text-sm font-semibold text-slate-100">{dataPoint.attack_type}</p>
+        <p className="text-xs text-slate-400 mt-1">
+          Count: <span className="text-slate-200 font-bold">{dataPoint.count.toLocaleString()}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const DistributionChart = ({ data }) => {
   const getBarColor = (name) => {
     switch (name) {
@@ -14,21 +29,6 @@ const DistributionChart = ({ data }) => {
       case 'Port Scan': return '#fbbf24'; // Amber
       default: return '#38bdf8'; // Sky Blue
     }
-  };
-
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const dataPoint = payload[0].payload;
-      return (
-        <div className="bg-slate-900/90 border border-slate-800 p-3 rounded-lg shadow-xl backdrop-blur-md">
-          <p className="text-sm font-semibold text-slate-100">{dataPoint.attack_type}</p>
-          <p className="text-xs text-slate-400 mt-1">
-            Count: <span className="text-slate-200 font-bold">{dataPoint.count.toLocaleString()}</span>
-          </p>
-        </div>
-      );
-    }
-    return null;
   };
 
   return (
@@ -53,7 +53,7 @@ const DistributionChart = ({ data }) => {
             axisLine={false}
             tickFormatter={(value) => value >= 1000 ? `${(value/1000).toFixed(0)}k` : value}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: '#334155', opacity: 0.1 }} />
+          <Tooltip content={<DistributionTooltip />} cursor={{ fill: '#334155', opacity: 0.1 }} />
           <Bar dataKey="count" radius={[4, 4, 0, 0]}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={getBarColor(entry.attack_type)} />
