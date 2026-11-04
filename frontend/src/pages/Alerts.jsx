@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Filter, Search, ChevronLeft, ChevronRight, UploadCloud } from 'lucide-react';
+import { Filter, Search, ChevronLeft, ChevronRight, UploadCloud, Download } from 'lucide-react';
 
 import Loader from '../components/Loader';
 import EmptyState from '../components/EmptyState';
@@ -113,6 +113,31 @@ const Alerts = ({ showOnlyAttacks = false }) => {
     return date.toLocaleString();
   };
 
+  const handleExportCSV = () => {
+    if (!threats || threats.length === 0) return;
+    const headers = ['ID', 'Timestamp', 'Source IP', 'Destination IP', 'Attack Type', 'Severity', 'Confidence', 'Status', 'Blocked', 'MITRE ID'];
+    const rows = threats.map(t => [
+      t.id,
+      t.timestamp,
+      t.source_ip,
+      t.destination_ip,
+      `"${t.attack_type}"`,
+      t.severity,
+      t.confidence,
+      t.status,
+      t.is_blocked ? 'Yes' : 'No',
+      t.mitre_id || 'N/A'
+    ]);
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `soc_threat_logs_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-6">
       
@@ -128,13 +153,23 @@ const Alerts = ({ showOnlyAttacks = false }) => {
               : "Complete audit logs of benign and anomalous network activities."}
           </p>
         </div>
-        <button
-          onClick={() => setShowPcapModal(true)}
-          className="flex items-center gap-2 px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-bold transition-all shadow cursor-pointer self-start sm:self-auto"
-        >
-          <UploadCloud className="w-4 h-4" />
-          <span>Ingest PCAP Capture</span>
-        </button>
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            onClick={handleExportCSV}
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition-all shadow cursor-pointer"
+            title="Export currently loaded alerts to CSV spreadsheet"
+          >
+            <Download className="w-3.5 h-3.5 text-sky-400" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            onClick={() => setShowPcapModal(true)}
+            className="flex items-center gap-2 px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-bold transition-all shadow cursor-pointer"
+          >
+            <UploadCloud className="w-4 h-4" />
+            <span>Ingest PCAP Capture</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter Toolbar */}

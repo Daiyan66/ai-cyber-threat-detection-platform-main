@@ -1,99 +1,110 @@
 {
   "model_family": "Random Forest Classifier (CIC-IDS2017)",
-  "accuracy": 99.5,
-  "macro_f1": 99.37,
-  "precision": 99.24,
-  "recall": 99.49,
-  "last_trained": "September 27, 2026 - 11:25:53 UTC",
-  "total_samples": 12000,
+  "accuracy": 93.32,
+  "macro_f1": 86.73,
+  "precision": 86.55,
+  "recall": 86.94,
+  "last_trained": "November 03, 2026 - 12:01:31 UTC",
+  "total_samples": 17146,
   "benchmark_comparison": [
     {
       "name": "Random Forest",
       "type": "Tree Ensemble",
-      "accuracy": 99.5,
-      "macro_f1": 99.37,
-      "precision": 99.24,
-      "recall": 99.49,
-      "latency_us": 16.86,
-      "train_time_s": 0.63,
+      "accuracy": 93.32,
+      "macro_f1": 86.73,
+      "precision": 86.55,
+      "recall": 86.94,
+      "latency_us": 39.22,
+      "train_time_s": 1.23,
       "selected": true
     },
     {
       "name": "Hist Gradient Boosting",
       "type": "Gradient Boosting",
-      "accuracy": 99.5,
-      "macro_f1": 99.37,
-      "precision": 99.24,
-      "recall": 99.49,
-      "latency_us": 30.12,
-      "train_time_s": 5.34,
+      "accuracy": 94.17,
+      "macro_f1": 84.95,
+      "precision": 87.9,
+      "recall": 84.51,
+      "latency_us": 42.59,
+      "train_time_s": 6.94,
       "selected": false
     },
     {
       "name": "Multi-Layer Perceptron (MLP)",
       "type": "Deep Neural Network",
-      "accuracy": 99.0,
-      "macro_f1": 98.73,
-      "precision": 98.66,
-      "recall": 98.79,
-      "latency_us": 2.89,
-      "train_time_s": 9.95,
+      "accuracy": 94.23,
+      "macro_f1": 82.11,
+      "precision": 90.89,
+      "recall": 82.89,
+      "latency_us": 3.86,
+      "train_time_s": 29.95,
       "selected": false
     },
     {
       "name": "Logistic Regression",
       "type": "Linear Baseline",
-      "accuracy": 98.38,
-      "macro_f1": 97.9,
-      "precision": 97.72,
-      "recall": 98.09,
-      "latency_us": 0.73,
-      "train_time_s": 0.25,
+      "accuracy": 90.26,
+      "macro_f1": 78.35,
+      "precision": 92.97,
+      "recall": 79.94,
+      "latency_us": 1.84,
+      "train_time_s": 1.71,
+      "selected": false
+    },
+    {
+      "name": "1D-CNN (PyTorch)",
+      "type": "Deep Convolutional Neural Network",
+      "accuracy": 89.35,
+      "macro_f1": 77.32,
+      "precision": 91.05,
+      "recall": 79.33,
+      "latency_us": 118.77,
+      "train_time_s": 89.82,
       "selected": false
     }
   ],
   "class_metrics": [
     {
       "class": "Benign",
-      "precision": "99.52%",
-      "recall": "99.05%",
-      "f1": "99.28%",
-      "support": "840"
+      "precision": "96.86%",
+      "recall": "95.50%",
+      "f1": "96.17%",
+      "support": "1000"
     },
     {
       "class": "Botnet",
-      "precision": "100.00%",
-      "recall": "100.00%",
-      "f1": "100.00%",
-      "support": "120"
+      "precision": "93.69%",
+      "recall": "98.22%",
+      "f1": "95.90%",
+      "support": "393"
     },
     {
       "class": "Brute Force",
-      "precision": "100.00%",
-      "recall": "100.00%",
-      "f1": "100.00%",
-      "support": "288"
+      "precision": "88.72%",
+      "recall": "88.28%",
+      "f1": "88.50%",
+      "support": "802"
     },
     {
       "class": "DDoS",
-      "precision": "100.00%",
-      "recall": "100.00%",
-      "f1": "100.00%",
+      "precision": "99.83%",
+      "recall": "99.83%",
+      "f1": "99.83%",
       "support": "600"
     },
     {
       "class": "PortScan",
-      "precision": "100.00%",
-      "recall": "100.00%",
-      "f1": "100.00%",
-      "support": "360"
+      "precision": "99.60%",
+      "recall": "99.80%",
+      "f1": "99.70%",
+      "support": "500"
     },
     {
       "class": "Web Attack",
-      "precision": "95.92%",
-      "recall": "97.92%",
-      "f1": "96.91%",
-      "support": "192"
+      "precision": "40.60%",
+      "recall": "40.00%",
+      "f1": "40.30%",
+      "support": "135"
     }
   ],
   "confusion_matrix": {
@@ -109,19 +120,19 @@
       {
         "label": "Benign",
         "values": [
-          832,
+          955,
+          26,
+          16,
           0,
-          0,
-          0,
-          0,
-          8
+          1,
+          2
         ]
       },
       {
         "label": "Botnet",
         "values": [
-          0,
-          120,
+          7,
+          386,
           0,
           0,
           0,
@@ -131,21 +142,21 @@
       {
         "label": "Brute Force",
         "values": [
+          17,
+          0,
+          708,
           0,
           0,
-          288,
-          0,
-          0,
-          0
+          77
         ]
       },
       {
         "label": "DDoS",
         "values": [
+          1,
           0,
           0,
-          0,
-          600,
+          599,
           0,
           0
         ]
@@ -156,56 +167,198 @@
           0,
           0,
           0,
-          0,
-          360,
+          1,
+          499,
           0
         ]
       },
       {
         "label": "Web Attack",
         "values": [
-          4,
+          6,
           0,
+          74,
           0,
-          0,
-          0,
-          188
+          1,
+          54
         ]
       }
     ]
   },
   "top_features": [
     {
-      "feature": "pkt_len_variance",
-      "importance": 0.1249
+      "feature": "fwd_pkt_len_mean",
+      "importance": 0.0861
     },
     {
-      "feature": "bwd_iat_mean",
-      "importance": 0.1027
-    },
-    {
-      "feature": "flow_iat_mean",
-      "importance": 0.0877
-    },
-    {
-      "feature": "fwd_iat_mean",
-      "importance": 0.0804
-    },
-    {
-      "feature": "flow_iat_std",
-      "importance": 0.0729
-    },
-    {
-      "feature": "fwd_header_len",
-      "importance": 0.0649
-    },
-    {
-      "feature": "subflow_fwd_pkts",
-      "importance": 0.064
+      "feature": "totlen_fwd_pkts",
+      "importance": 0.0793
     },
     {
       "feature": "bwd_pkt_len_mean",
-      "importance": 0.0538
+      "importance": 0.0766
+    },
+    {
+      "feature": "pkt_len_variance",
+      "importance": 0.0729
+    },
+    {
+      "feature": "flow_duration",
+      "importance": 0.0683
+    },
+    {
+      "feature": "flow_byts_s",
+      "importance": 0.0679
+    },
+    {
+      "feature": "fwd_iat_mean",
+      "importance": 0.0611
+    },
+    {
+      "feature": "flow_iat_std",
+      "importance": 0.0592
     }
-  ]
+  ],
+  "deep_learning": {
+    "model_name": "1D-Convolutional Neural Network (PyTorch)",
+    "architecture": "Conv1D(32) -> Conv1D(64) -> MaxPool1D -> Dense(128) -> Dense(64) -> Softmax",
+    "test_accuracy": 89.35,
+    "test_macro_f1": 77.32,
+    "test_precision": 91.05,
+    "test_recall": 79.33,
+    "inference_latency_us": 118.77,
+    "total_epochs": 15,
+    "batch_size": 64,
+    "history": {
+      "epoch": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "train_loss": [
+        0.5114,
+        0.3028,
+        0.276,
+        0.2644,
+        0.2559,
+        0.2463,
+        0.2438,
+        0.2393,
+        0.2269,
+        0.2156,
+        0.2089,
+        0.2065,
+        0.199,
+        0.1978,
+        0.1912
+      ],
+      "val_loss": [
+        0.3067,
+        0.2684,
+        0.2706,
+        0.2378,
+        0.2731,
+        0.2179,
+        0.2374,
+        0.2362,
+        0.5191,
+        0.2593,
+        0.1811,
+        0.2818,
+        0.2183,
+        0.184,
+        0.2147
+      ],
+      "train_acc": [
+        81.6,
+        87.86,
+        89.11,
+        89.32,
+        89.85,
+        90.08,
+        90.08,
+        90.31,
+        90.91,
+        91.25,
+        91.48,
+        91.65,
+        91.75,
+        92.13,
+        92.12
+      ],
+      "val_acc": [
+        86.75,
+        89.08,
+        88.81,
+        89.93,
+        89.2,
+        91.64,
+        89.0,
+        89.2,
+        79.63,
+        88.96,
+        93.66,
+        86.05,
+        89.9,
+        93.2,
+        89.55
+      ]
+    },
+    "class_metrics": [
+      {
+        "class": "Benign",
+        "precision": "96.87%",
+        "recall": "90.67%",
+        "f1": "93.66%",
+        "support": "750"
+      },
+      {
+        "class": "Botnet",
+        "precision": "68.54%",
+        "recall": "98.98%",
+        "f1": "81.00%",
+        "support": "295"
+      },
+      {
+        "class": "Brute Force",
+        "precision": "81.13%",
+        "recall": "83.69%",
+        "f1": "82.39%",
+        "support": "601"
+      },
+      {
+        "class": "DDoS",
+        "precision": "99.78%",
+        "recall": "98.67%",
+        "f1": "99.22%",
+        "support": "450"
+      },
+      {
+        "class": "PortScan",
+        "precision": "100.00%",
+        "recall": "100.00%",
+        "f1": "100.00%",
+        "support": "375"
+      },
+      {
+        "class": "Web Attack",
+        "precision": "100.00%",
+        "recall": "3.96%",
+        "f1": "7.62%",
+        "support": "101"
+      }
+    ]
+  }
 }

@@ -504,6 +504,40 @@ async def websocket_threats_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
+# 15. POST /model/retrain - Trigger Live Retraining Pipeline
+@app.post("/model/retrain")
+def retrain_model_endpoint():
+    """
+    Triggers automated pipeline retraining on the real CIC-IDS2017 dataset.
+    Fits all candidate models, refreshes benchmarks, and hot-reloads model in memory.
+    """
+    import subprocess
+    import src.predict as predict_module
+    
+    train_script = os.path.join(PROJECT_ROOT, "src", "train_model.py")
+    result = subprocess.run([sys.executable, train_script], capture_output=True, text=True)
+    
+    if result.returncode != 0:
+        raise HTTPException(status_code=500, detail=f"Model retraining failed: {result.stderr}")
+        
+    # Hot-reload in memory
+    predict_module._MODEL = None
+    predict_module.get_model()
+    
+    metrics_path = os.path.join(PROJECT_ROOT, "ml", "metrics.json")
+    if os.path.exists(metrics_path):
+        with open(metrics_path, "r") as f:
+            metrics = json.load(f)
+    else:
+        metrics = {"message": "Retraining completed successfully"}
+        
+    return {
+        "success": True,
+        "message": "Model retrained and reloaded into production memory successfully.",
+        "metrics": metrics
+    }
+
+
 
 
 

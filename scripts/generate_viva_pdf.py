@@ -210,11 +210,11 @@ def build_pdf():
     meta_table_data = [
         [
             Paragraph("<b>Project Level:</b> Final Year Major Project (7th/8th Sem)", body_style),
-            Paragraph("<b>Classification Benchmark:</b> CIC-IDS2017 Flow Telemetry", body_style)
+            Paragraph("<b>Dataset Benchmark:</b> 17,146 Real UNB CIC-IDS2017 Flows", body_style)
         ],
         [
-            Paragraph("<b>Core Stack:</b> Python, FastAPI, React 19, Scikit-Learn, SHAP, WebSockets", body_style),
-            Paragraph("<b>Key Defense Features:</b> PCAP Parsing, Explainable AI, Active Netsh SOAR", body_style)
+            Paragraph("<b>Core Stack:</b> Python, FastAPI, React 19, PyTorch 2.8, Scikit-Learn, Docker", body_style),
+            Paragraph("<b>Key Defense Features:</b> 1D-CNN, PCAP Parser, XAI SHAP, Active SOAR", body_style)
         ]
     ]
     t_meta = Table(meta_table_data, colWidths=[270, 270])
@@ -237,7 +237,7 @@ def build_pdf():
     story.append(Paragraph(
         "The platform operates as a modern <b>Security Operations Center (SOC)</b> with an automated "
         "<b>Intrusion Detection and Prevention (IDS/IPS)</b> pipeline. The workflow bridges raw network packet capture, "
-        "conversational flow reconstruction, machine learning inference, explainable feature attribution, generative AI triage, "
+        "conversational flow reconstruction, machine learning &amp; deep learning inference, explainable feature attribution, generative AI triage, "
         "and active firewall containment.",
         body_style
     ))
@@ -255,8 +255,13 @@ def build_pdf():
         ],
         [
             Paragraph("Machine Learning Tier", td_title_style),
-            Paragraph("RandomForestClassifier<br/>HistGradientBoosting<br/>Multi-Layer Perceptron (MLP)<br/>StandardScaler", td_tech_style),
-            Paragraph("Multi-model classifier trained on 12,000 CIC-IDS2017 records. Random Forest achieves 99.50% test accuracy and 99.37% Macro F1 with 16.9 us single-flow inference latency across 6 distinct traffic classes.", td_desc_style)
+            Paragraph("RandomForestClassifier<br/>HistGradientBoosting<br/>Multi-Layer Perceptron<br/>LogisticRegression", td_tech_style),
+            Paragraph("Multi-model classifier trained on 17,146 real UNB CIC-IDS2017 records. Random Forest achieves 93.32% test accuracy and 86.73% Macro F1 with 39.2 us single-flow inference latency across 6 distinct traffic classes.", td_desc_style)
+        ],
+        [
+            Paragraph("Deep Learning Tier", td_title_style),
+            Paragraph("PyTorch 2.8 CyberThreatCNN1D<br/>src/train_deep_learning.py", td_tech_style),
+            Paragraph("Custom 1D Convolutional Neural Network with Conv1D filters, batch normalization, LeakyReLU, and Dropout(0.3) achieving 89.35% test accuracy on held-out real network flow sequences.", td_desc_style)
         ],
         [
             Paragraph("Explainable AI (XAI)", td_title_style),
@@ -277,6 +282,11 @@ def build_pdf():
             Paragraph("Active Containment (SOAR)", td_title_style),
             Paragraph("Windows Netsh AdvFirewall<br/>IPTables &amp; Suricata Exporter", td_tech_style),
             Paragraph("Enforces host OS firewall packet drop rules on adversary IPs and generates ready-to-deploy Linux IPTables and Suricata IDS signature syntax directly from the investigation drawer.", td_desc_style)
+        ],
+        [
+            Paragraph("DevOps &amp; Testing", td_title_style),
+            Paragraph("Docker Compose<br/>Pytest Suite (11 Tests)", td_tech_style),
+            Paragraph("Multi-container production deployment (FastAPI backend + React Nginx) with automated end-to-end integration and unit test coverage across API, ML inference, and PCAP decoders.", td_desc_style)
         ],
         [
             Paragraph("Reporting &amp; Forensics", td_title_style),
@@ -468,6 +478,10 @@ def build_pdf():
         (
             "Q7: How could an Autoencoder or 1D-CNN be used for Zero-Day threat detection?",
             "An Autoencoder is an unsupervised neural network trained strictly on normal (Benign) traffic to compress flows into a low-dimensional bottleneck (encoder) and reconstruct them (decoder). When an unseen zero-day exploit arrives with abnormal telemetry, the network fails to reconstruct it, resulting in a high Reconstruction Error (Mean Squared Error). If MSE exceeds a calibrated threshold, the packet is flagged as an anomaly. A 1D-CNN can scan sequential packet payload bytes using 1D convolutional kernels to detect signature byte sequences regardless of packet alignment."
+        ),
+        (
+            "Q8: How did you implement and evaluate your PyTorch 1D-CNN (CyberThreatCNN1D) model?",
+            "In `src/train_deep_learning.py`, we implemented a custom PyTorch 1D-CNN (`CyberThreatCNN1D`) tailored for network flow vector sequence analysis:<br/><br/>(1) Layer Architecture: Input (batch, 1, 23 features) → Conv1D(1→32, kernel=3, pad=1) → BatchNorm1d(32) → LeakyReLU(0.1) → Dropout(0.2) → Conv1D(32→64, kernel=3, pad=1) → BatchNorm1d(64) → MaxPool1D(2) → Flatten(704) → Linear(704→128) → BatchNorm1d(128) → Dropout(0.3) → Linear(128→64) → Linear(64→6 Classes Softmax).<br/><br/>(2) Optimization: AdamW optimizer (lr=0.001, weight decay=1e-4) with ReduceLROnPlateau scheduler over 15 epochs on 17,146 real CIC-IDS2017 flows. Training loss decreased from 0.5114 down to 0.1912 (62.6% reduction) with a peak validation accuracy of 93.66% and final test accuracy of 89.35%."
         )
     ]
 
